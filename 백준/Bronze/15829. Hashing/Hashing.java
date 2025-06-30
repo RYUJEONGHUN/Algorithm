@@ -1,35 +1,25 @@
-
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Scanner sc=new Scanner(System.in);
-		
-		HashMap<Character,Integer> map=new HashMap<Character,Integer>();
-		
-		int n=sc.nextInt();
-		
-		int sum=0;
-		
-		String s=sc.next();
-		
-		for(int j=0;j<26;j++) {
-			map.put((char)(97+j), j+1);
-		}
-		
-		
-		for(int i=0;i<n;i++) {
-			int a=1;
-			for(int j=0;j<i;j++) {
-				a=a*31;
-			}
-			int v=map.get(s.charAt(i));
-			sum=sum+v*a;
-		}
-		System.out.print(sum);
-	}
+        int n = sc.nextInt();
+        String s = sc.next();
+        
+        final int r = 31;
+        final int M = 1234567891;
 
+        long hash = 0;
+        long pow = 1;
+
+        for (int i = 0; i < n; i++) {
+            int value = s.charAt(i) - 'a' + 1;
+            hash = (hash + value * pow) % M;
+            pow = (pow * r) % M;
+        }
+
+        System.out.println(hash);
+        sc.close();
+    }
 }
