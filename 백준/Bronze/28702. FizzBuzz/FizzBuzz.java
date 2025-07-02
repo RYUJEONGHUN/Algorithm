@@ -1,11 +1,11 @@
+package class2;
 
 import java.util.Scanner;
 
-public class Main {
+public class Num28702 {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Scanner sc=new Scanner(System.in);
+		/*Scanner sc=new Scanner(System.in);
 		
 		String[] s=new String[3];
 		int result=0;
@@ -45,6 +45,43 @@ public class Main {
 			System.out.print(result);
 		}
 		
-		}
+		}*/
 
+		Scanner sc = new Scanner(System.in);
+        String[] s = new String[3];
+
+        for (int i = 0; i < 3; i++) {
+            s[i] = sc.next();
+        }
+
+        int result = -1;
+
+        for (int i = 2; i >= 0; i--) {
+            if (isNumeric(s[i])) {
+                result = Integer.parseInt(s[i]) + (3 - i);
+                break;
+            }
+        }
+
+        if (result % 3 == 0 && result % 5 == 0) {
+            System.out.println("FizzBuzz");
+        } else if (result % 3 == 0) {
+            System.out.println("Fizz");
+        } else if (result % 5 == 0) {
+            System.out.println("Buzz");
+        } else {
+            System.out.println(result);
+        }
+
+        sc.close();
+    }
+
+    private static boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
