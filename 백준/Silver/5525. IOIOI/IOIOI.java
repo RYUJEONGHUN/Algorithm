@@ -1,5 +1,4 @@
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -28,20 +27,25 @@ public class Main {
 		
 		String s=br.readLine();
 		
-		for(int i=0;i<M-size+1;i++) {
-			boolean check=true;
-			for(int j=0;j<size;j++) {
-				if(s.charAt(i+j)!=arr[j]) {
-					check=false;
-					break;
+		int j=0;
+		int sum=0;
+		
+		while(j<M-2) {
+			if(s.charAt(j)=='I') {
+				int count=0;
+				while(j<M-2 && s.charAt(j+1)=='O' && s.charAt(j+2)=='I') {
+					j=j+2;
+					count++;
+					
+				}
+				if(count>=N) {
+					sum=sum+count-N+1;
 				}
 			}
-			if(check==true) {
-				count++;
-			}
+			j++;
 		}
 		
-		System.out.print(count);
+		System.out.print(sum);
 	}
 
 }
