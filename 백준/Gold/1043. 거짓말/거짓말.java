@@ -3,99 +3,98 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.Set;
 
 public class Main {
-
+	static int[] parent;
+	static List<Integer> r;
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
+		
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 		
 		String[] arg=br.readLine().split(" ");
 		
+		List<ArrayList<Integer>> arr=new ArrayList<ArrayList<Integer>>();
+		r=new ArrayList<Integer>();
+		
+		String[] rt=br.readLine().split(" ");
+		
+		int pn=Integer.parseInt(rt[0]);
+		
+		for(int i=1;i<=pn;i++) {
+			r.add(Integer.parseInt(rt[i]));
+		}
+		
 		int N=Integer.parseInt(arg[0]);
 		int M=Integer.parseInt(arg[1]);
 		
-		List<Integer> s=new ArrayList<Integer>();
-				
-		String[] temp=br.readLine().split(" ");
+		parent=new int[N+1];
 		
-		int tn=Integer.parseInt(temp[0]);
-		
-		for(int i=1;i<=tn;i++) {
-			int n=Integer.parseInt(temp[i]);
-			s.add(n);
+		for(int a=0;a<M;a++) {
+			arr.add(new ArrayList<Integer>());
 		}
 		
-		List<HashSet<Integer>> arr=new ArrayList<HashSet<Integer>>();
-		
-		for(int i=0;i<M;i++) {
-			arr.add(new HashSet<Integer>());
+		for(int i=1;i<=N;i++) {
+			parent[i]=i;
 		}
+	
 		
-		int[][] arrb=new int[N+1][N+1];
-		
-		
-		for(int i=0;i<M;i++) {
-			String[] arrt=br.readLine().split(" ");
+		for(int j=0;j<M;j++) {
 			
-			int n=Integer.parseInt(arrt[0]);
+			String[] temp=br.readLine().split(" ");
 			
-			for(int j=0;j<n;j++) {
-				int a=Integer.parseInt(arrt[j+1]);
-				for(int k=0;k<n;k++) {
-					int b=Integer.parseInt(arrt[k+1]);
-					arrb[a][b]=1;
-				}
-			}
+			int m=Integer.parseInt(temp[0]);
 			
-			for(int j=0;j<n;j++) {
-				arr.get(i).add(Integer.parseInt(arrt[j+1]));
+			int f=Integer.parseInt(temp[1]);
+			arr.get(j).add(f);
+			
+			for(int a=2;a<=m;a++) {
+				int b=Integer.parseInt(temp[a]);
+				union(f,b);
+				arr.get(j).add(b);
 			}
 		}
 		
-		
-		for(int i=0;i<s.size();i++) {
-			int[] visited=new int[N+1];
+		int cnt=0;
+		for(int a=0;a<M;a++) {
+			boolean flag=true;
+			int size=arr.get(a).size();
 			
-			int n=s.get(i);
-			
-			Queue<Integer> q=new LinkedList<Integer>();
-			q.add(n);
-			
-			while(!q.isEmpty()) {
-				int c=q.poll();
-				visited[c]=1;
-				for(int j=1;j<=N;j++) {
-					if(arrb[c][j]==1 && visited[j]!=1) {
-						if(!s.contains(j)) {
-							s.add(j);
-						}
-						q.add(j);
-					}
-				}
-			}
-			
-		}
-		
-		
-		int size=0;
-		
-		for(int i=0;i<arr.size();i++) {
-			boolean check=true;
-			for(int j=0;j<s.size();j++) {
-				if(arr.get(i).contains(s.get(j))) {
-					check=false;
+			for(int b=0;b<size;b++) {
+				if(r.contains(find(arr.get(a).get(b)))) {
+					flag=false;
 					break;
 				}
 			}
-			if(check)size++;
+			
+			if(flag) {
+				cnt++;
+			}
 		}
-		System.out.print(size);
+		System.out.print(cnt);
+	}
+	
+	public static int find(int x) {
+		if(parent[x]==x) {
+			return x;
+		}
+		
+		return find(parent[x]);
+	}
+	
+	
+	public static void union(int x,int y) {
+		int tx=find(x);
+		int ty=find(y);
+		
+		if(r.contains(ty)) {
+			parent[tx]=ty;
+			return;
+		}
+		
+		parent[ty]=tx;
+		return;
 	}
 
 }
