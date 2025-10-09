@@ -2,68 +2,42 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class Main {
 
-	public static void main(String[] args) throws NumberFormatException, IOException {
+	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 		
-		String[] arg=br.readLine().split(" ");
+		String[] temp=br.readLine().split(" ");
 		
-		int N=Integer.parseInt(arg[0]);
-		int K=Integer.parseInt(arg[1]);
+		int N=Integer.parseInt(temp[0]);
+		int K=Integer.parseInt(temp[1]);
 		
-		ArrayList<Integer> arr=new ArrayList<Integer>();
+		int[] w=new int[N+1];
+		int[] v=new int[N+1];
 		
-		int[][] dp=new int[N][K+1];
+		int[][] dp=new int[N+1][K+1];
 		
-		int[] w=new int[N];
-		int[] v=new int[N];
-				
-		
-		for(int i=0;i<N;i++) {
-			String[] temp=br.readLine().split(" ");
-			w[i]=Integer.parseInt(temp[0]);
-			v[i]=Integer.parseInt(temp[1]);
+		for(int i=1;i<=N;i++) {
+			String[] arg=br.readLine().split(" ");
+			int a=Integer.parseInt(arg[0]);
+			int b=Integer.parseInt(arg[1]);
+			
+			w[i]=a;
+			v[i]=b;
 		}
 		
-		for(int b=0;b<=K;b++) {
-			if(b>=w[0]) {
-				dp[0][b]=v[0];
-			}
-			else {
-				dp[0][b]=0;
-			}
-		}
-		
-		for(int a=1;a<N;a++) {
-			for(int b=0;b<=K;b++) {
-				if(b>=w[a]) {
-					int temp=b-w[a];
-					if(temp>=0) {
-						dp[a][b]=Math.max(dp[a-1][temp]+v[a],dp[a-1][b]);
-					}
-					else {
-						dp[a][b]=Math.max(dp[a-1][b], v[a]);
-					}
+		for(int i=1;i<=N;i++) {
+			for(int j=0;j<=K;j++) {
+				if(w[i]>j) {
+					dp[i][j]=dp[i-1][j];
 				}else {
-					dp[a][b]=dp[a-1][b];
+					dp[i][j]=Math.max(dp[i-1][j],dp[i-1][j-w[i]]+v[i]);
 				}
 			}
 		}
-		
-		
-		int max=Integer.MIN_VALUE;
-		
-		for(int a=0;a<=K;a++) {
-			max=Math.max(max, dp[N-1][a]);
-		}
-		
-		System.out.print(max);
-
+		System.out.print(dp[N][K]);
 	}
 
 }
