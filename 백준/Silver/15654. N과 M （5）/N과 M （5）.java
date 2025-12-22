@@ -1,58 +1,59 @@
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
 public class Main {
+
 	static int N;
 	static int M;
+	static int[] vis;
+	static int[] arr;
+	static int[] snum;
+	static StringBuilder sb;
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
+		
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 		
 		String[] arg=br.readLine().split(" ");
 		
-		N=Integer.parseInt(arg[0]);
-		
-		M=Integer.parseInt(arg[1]);
-		
-
-		int[] arr=new int[N];
-			
-		int[] visited=new int[N];
-		int[] stack=new int[N];
-		
+		N=Integer.parseInt(arg[0]); //N
+		M=Integer.parseInt(arg[1]); //M
+		sb=new StringBuilder();
+		snum=new int[N];
 		String[] temp=br.readLine().split(" ");
 		
-		for(int j=0;j<N;j++) {
-			arr[j]=Integer.parseInt(temp[j]);
+		for(int i=0;i<N;i++) {
+			snum[i]=Integer.parseInt(temp[i]);
 		}
-		Arrays.sort(arr);
 		
-		dfs(arr,visited,0,stack);
+		Arrays.sort(snum);
 		
+		vis=new int[N];
+		arr=new int[M];
+		dfs(0);
+		
+		System.out.print(sb);
 	}
 	
-	public static void dfs(int[] graph,int[] visited,int count,int[] stack) {
-		
-		if(count==M) {
+	public static void dfs(int level) {
+		if(level==M) {
 			for(int i=0;i<M;i++) {
-				System.out.print(stack[i]+" ");
+				sb.append(arr[i]+" ");
 			}
-			System.out.println();
+			sb.append("\n");
 			return;
 		}
 		
-		for(int i=0;i<graph.length;i++) {
-			if(visited[i]!=1) {
-				stack[count]=graph[i];
-				visited[i]=1;
-				dfs(graph,visited,count+1,stack);
-				visited[i]=0;
+		for(int j=0;j<N;j++) {
+			if(vis[j]!=1) {
+				vis[j]=1;
+				arr[level]=snum[j];
+				dfs(level+1);
+				vis[j]=0;
 			}
 		}
 	}
-
 }
