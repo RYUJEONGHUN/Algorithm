@@ -1,55 +1,44 @@
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-	static ArrayList<Integer>[] arr;
-	static int[] visited;
-	static int[] c;
-	static int N;
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		// TODO Auto-generated method stub
-		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-		
-		N=Integer.parseInt(br.readLine());
-		
-		arr = new ArrayList[N + 1];
-		visited=new int[N+1];
-		
-		c=new int[N+1];
-		
-		
-		for(int i=1;i<=N;i++) {
-			arr[i]=new ArrayList<Integer>();
-		}
-		
-		for(int i=1;i<N;i++) {
-			String[] arg=br.readLine().split(" ");
-			int a=Integer.parseInt(arg[0]);
-			int b=Integer.parseInt(arg[1]);
-			
-			arr[a].add(b);
-			arr[b].add(a);
-		}
-		
-		visited[1]=1;
-		dfs(1);
-		
-		for(int i=2;i<=N;i++) {
-			System.out.println(c[i]);
-		}
-	}
-	
-	public static void dfs(int n) {
-		for(int next:arr[n]) {
-			if( visited[next]!=1) {
-				visited[next]=1;
-				c[next]=n;
-				dfs(next);
-			}
-		}
-	}
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine().trim());
 
+        List<Integer>[] g = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++) g[i] = new ArrayList<>();
+
+        for (int i = 0; i < N - 1; i++) {
+            String line = br.readLine();
+            while (line != null && line.trim().isEmpty()) line = br.readLine(); // 혹시 빈줄 방어
+            String[] t = line.trim().split("\\s+");
+            int a = Integer.parseInt(t[0]);
+            int b = Integer.parseInt(t[1]);
+            g[a].add(b);
+            g[b].add(a);
+        }
+
+        int[] parent = new int[N + 1];
+        boolean[] vis = new boolean[N + 1];
+
+        Queue<Integer> q = new ArrayDeque<>();
+        q.add(1);
+        vis[1] = true;
+
+        while (!q.isEmpty()) {
+            int cur = q.poll();
+            for (int nxt : g[cur]) {
+                if (!vis[nxt]) {
+                    vis[nxt] = true;
+                    parent[nxt] = cur;
+                    q.add(nxt);
+                }
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 2; i <= N; i++) sb.append(parent[i]).append('\n');
+        System.out.print(sb);
+    }
 }
