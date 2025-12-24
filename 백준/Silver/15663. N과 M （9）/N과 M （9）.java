@@ -7,64 +7,64 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public class Main {
-
-	static int[] arr;
-	static int[] visited;
-	static int[] r;
-	static int M;
 	static int N;
-	static HashSet<String> a;
+	static int M;
+	static int[] arr;
+	static int[] vis;
+	static int[] carr;
+	static HashSet<String> s;
+	static StringBuilder sb;
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-		
-		String[] arg=br.readLine().split(" ");
-		
-		N=Integer.parseInt(arg[0]);
-		M=Integer.parseInt(arg[1]);
-		
-		arr=new int[N];
-		visited=new int[N];
-		
-		
-		r=new int[M];
-		a=new HashSet<String>();
-		
+		sb=new StringBuilder();
 		String[] temp=br.readLine().split(" ");
 		
+		N=Integer.parseInt(temp[0]);
+		M=Integer.parseInt(temp[1]);
+		
+		s=new HashSet<String>();
+		
+		arr=new int[N];
+		carr=new int[M];
+		
+		String[] aa=br.readLine().split(" ");
+		
 		for(int i=0;i<N;i++) {
-			arr[i]=Integer.parseInt(temp[i]);
+			arr[i]=Integer.parseInt(aa[i]);
 		}
+		
 		Arrays.sort(arr);
+		vis=new int[N];
 		
 		dfs(0);
-		
+				
+		System.out.print(sb);
 	}
-	public static void dfs(int node) {
-		if(node==M) {
-			StringBuilder sb = new StringBuilder();
-			for(int temp:r) {
-				sb.append(temp).append(' ');
+	
+	public static void dfs(int level) {
+		if(level==M) {
+			String ss="";
+			for(int j=0;j<M;j++) {
+				ss+=carr[j]+" ";
 			}
-			String key=sb.toString();
-			if(!a.contains(key)) {
-				for(int j=0;j<M;j++) {
-					System.out.print(r[j]+" ");
-				}
-				a.add(key);
-				System.out.println();
+			if(!s.contains(ss)) {
+				s.add(ss);
+				sb.append(ss+"\n");
 			}
+			
 			return;
 		}
 		
 		for(int i=0;i<N;i++) {
-			if(visited[i]!=1) {
-				visited[i]=1;
-				r[node]=arr[i];
-				dfs(node+1);
-				visited[i]=0;
+			if(vis[i]==0) {
+				carr[level]=arr[i];
+				vis[i]=1;
+				dfs(level+1);
+				vis[i]=0;
 			}
 		}
 	}
-
-} 
+	
+	
+}
