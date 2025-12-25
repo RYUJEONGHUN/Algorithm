@@ -2,65 +2,66 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class Main {
-
-	static ArrayList<Integer> a;
-	static int[] r;
-	
-	static int M;
 	static int N;
-	//static int[] arr;
-	static int size;
+	static int M;
+	static int[] arr;
+	static int[] vis;
+	static int[] carr;
+	static int prev;
+	static StringBuilder sb;
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-		a=new ArrayList<Integer>();
-		
-		String[] arg=br.readLine().split(" ");
-		
-		N=Integer.parseInt(arg[0]);
-		M=Integer.parseInt(arg[1]);
-						
-		r=new int[M];
+		sb=new StringBuilder();
 		String[] temp=br.readLine().split(" ");
 		
-		//arr=new int[N];
+		N=Integer.parseInt(temp[0]);
+		M=Integer.parseInt(temp[1]);
+		
+		
+		arr=new int[N];
+		carr=new int[M];
+		
+		String[] aa=br.readLine().split(" ");
+		
 		for(int i=0;i<N;i++) {
-			int n=Integer.parseInt(temp[i]);
-			if(!a.contains(n)) {
-				a.add(n);
-			}
+			arr[i]=Integer.parseInt(aa[i]);
 		}
 		
-		Collections.sort(a);
-		size=a.size();
-		dfs(0,a.get(0));
-	}
-	
-	public static void dfs(int level,int prev) {
+		Arrays.sort(arr);
 		
+		dfs(0);
+				
+		System.out.print(sb);
+		
+	}
+	public static void dfs(int level) {
 		if(level==M) {
 			for(int j=0;j<M;j++) {
-				System.out.print(r[j]+" ");
+				System.out.print(carr[j]+" ");
 			}
 			System.out.println();
+			
 			return;
 		}
-		int[] visited=new int[10001];
+		int prev=-1;
+		 
+		for(int i=0;i<N;i++) {
+			if(prev==arr[i]) continue;
 		
-		for(int i=0;i<size;i++) {
-			int temp=a.get(i);
-			if(visited[temp]!=1 && temp>=prev) {
-				r[level]=temp;
-				visited[temp]=1;
-				dfs(level+1,a.get(i));
-				visited[temp]=0;
+			if(level==0) {
+				carr[level]=arr[i];
+				prev=arr[i];
+				dfs(level+1);
+			}
+			else if(arr[i]>=carr[level-1]) {
+				carr[level]=arr[i];
+				prev=arr[i];
+				dfs(level+1);
 			}
 		}
 	}
-
 }
