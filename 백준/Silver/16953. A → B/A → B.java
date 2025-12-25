@@ -2,73 +2,60 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 
-class Point {
-	long current;
-	long level;
-	public Point(long tc,long tl) {
-		current=tc;
-		level=tl;
+class Point_16953{
+	long stage;
+	long num;
+	public Point_16953(long num,long stage) {
+		this.num=num;
+		this.stage=stage;
 	}
 }
 
-public class Main {
+public class Main{
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
+		
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 		
-		HashSet<Long> s=new HashSet<Long>();
+		String[] temp=br.readLine().split(" ");
 		
-		String[] arg=br.readLine().split(" ");
+		long A=Integer.parseInt(temp[0]);
+		long B=Integer.parseInt(temp[1]);
 		
-		long A=Long.parseLong(arg[0]);
-		long B=Long.parseLong(arg[1]);
+		Queue<Point_16953> q=new LinkedList<Point_16953>();
 		
+		q.add(new Point_16953(A,1));
 		
-		Queue<Point> q=new LinkedList<Point>();
-		
-		q.add(new Point(A,1));
-		s.add(A);
-		
-		boolean check=false;
 		long result=-1;
 		
 		while(!q.isEmpty()) {
-			Point p=q.poll();
-			long c=p.current;
-			long l=p.level;
+			Point_16953 cur=q.poll();
+			long cs=cur.stage;
+			long num=cur.num;
 			
-			if(c==B) {
-				result=l;
-				check=true;
+			if(num==B) {
+				result=cs;
 				break;
 			}
-			else {
-				long a=2*c;
-				long b=c*10+1;
-				
-				if(!s.contains(a) && a<=B) {
-					q.add(new Point(a,l+1));
-					s.add(a);
-				}
-				if(!s.contains(b) && b<=B) {
-					q.add(new Point(b,l+1));
-					s.add(b);
-				}
+			
+			long a=2*num;
+			long b=num*10+1;
+			
+			if(a<=B) {
+				q.add(new Point_16953(a,cs+1));
 			}
+			if(b<=B) {
+				q.add(new Point_16953(b,cs+1));
+			}
+			
 		}
 		
-		if(check) {
-			System.out.print(result);
-		}
-		else {
-			System.out.print(-1);
-		}
+		System.out.print(result);
+		
 	}
-	
 
 }
