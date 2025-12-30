@@ -2,94 +2,113 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 
+class Edge1991{
+	char left;
+	char right;
+	public Edge1991(char left,char right) {
+		this.left=left;
+		this.right=right;
+	}
+}
+
 public class Main {
-	static int[][] arr;
-	static ArrayList<Integer> result;
-	static int[] visited;
-	static HashMap<Integer,Character> m;
-	public static void main(String[] args) throws IOException {
-		m=new HashMap<Integer,Character>();
-		
-		
-		// TODO Auto-generated method stub
+	static HashMap<Character,Edge1991> map;
+	static int[] vis;
+	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		int N=Integer.parseInt(br.readLine());
 		
-		String[] arg=br.readLine().split(" ");
-		
-		int N=Integer.parseInt(arg[0]);
-		
-		arr=new int[N][2];
-		
-		for(int i=0;i<N;i++) {
-			m.put(i, (char) (i+65));
-		}
-		
+		map=new HashMap<Character,Edge1991>();
+		vis=new int[N];
 		
 		for(int i=0;i<N;i++) {
 			String[] temp=br.readLine().split(" ");
-			int a=temp[0].charAt(0) -'A';
-			if(!temp[1].equals(".")) { 
-				arr[a][0]=temp[1].charAt(0) -'A';
-			}else {
-				arr[a][0]=-1;
-			}
-			if(!temp[2].equals(".")) {
-				arr[a][1]=temp[2].charAt(0) -'A';;
-			}else {
-				arr[a][1]=-1;
-			}
+			char a=temp[0].charAt(0);
+			char b=temp[1].charAt(0);
+			char c=temp[2].charAt(0);
+			
+			map.put(a, new Edge1991(b,c));
 		}
 		
-		visited=new int[N];
-		result=new ArrayList<Integer>();
-		fdfs(0);
+		ftree('A');
 		System.out.println();
-		visited=new int[N];
-		result=new ArrayList<Integer>();
-		mdfs(0);
+		vis=new int[N];
+		mtree('A');
 		System.out.println();
-		visited=new int[N];
-		result=new ArrayList<Integer>();
-		bdfs(0);
-		
-	}
-
-	public static void fdfs(int c) {
-		System.out.print(m.get(c));
-		visited[c]=1;
-		if(arr[c][0]!=-1 && visited[arr[c][0]]!=1) {
-			fdfs(arr[c][0]);
-		}
-		if(arr[c][1]!=-1 && visited[arr[c][1]]!=1) {
-			fdfs(arr[c][1]);
-		}
-		return;
-	}
-	public static void mdfs(int c) {
-		
-		visited[c]=1;
-		if(arr[c][0]!=-1 && visited[arr[c][0]]!=1) {
-			mdfs(arr[c][0]);
-		}
-		System.out.print(m.get(c));
-		if(arr[c][1]!=-1 && visited[arr[c][1]]!=1) {
-			mdfs(arr[c][1]);
-		}
-		return;
+		vis=new int[N];
+		ltree('A');
 	}
 	
-	public static void bdfs(int c) {
-		visited[c]=1;
-		if(arr[c][0]!=-1 && visited[arr[c][0]]!=1) {
-			bdfs(arr[c][0]);
+	public static void ftree(char key) {
+		System.out.print(key);
+		int id=key-65;
+		vis[id]=1;
+		Edge1991 c=map.get(key);
+		char right=c.right;
+		char left=c.left;
+		
+		if(left!='.') {
+			int lid=left-65;
+			if(vis[lid]==0) {
+				ftree(c.left);
+			}
 		}
-		if(arr[c][1]!=-1 && visited[arr[c][1]]!=1) {
-			bdfs(arr[c][1]);
+			
+		if(right!='.'){
+			int rid=right-65;
+			if(vis[rid]==0) {
+				ftree(c.right);
+			}
 		}
-		System.out.print(m.get(c));
-		return;
+		
+	}
+	
+	public static void mtree(char key) {
+		int id=key-65;
+		Edge1991 c=map.get(key);
+		char right=c.right;
+		char left=c.left;
+		
+		if(left!='.') {
+			int lid=left-65;
+			if(vis[lid]==0) {
+				mtree(c.left);
+			}
+		}
+		System.out.print(key);
+		vis[id]=1;
+		
+		if(right!='.'){
+			int rid=right-65;
+			if(vis[rid]==0) {
+				mtree(c.right);
+			}
+		}
+		
+	}
+	
+	public static void ltree(char key) {
+		int id=key-65;
+		Edge1991 c=map.get(key);
+		char right=c.right;
+		char left=c.left;
+		
+		if(left!='.') {
+			int lid=left-65;
+			if(vis[lid]==0) {
+				ltree(c.left);
+			}
+		}
+		
+		if(right!='.'){
+			int rid=right-65;
+			if(vis[rid]==0) {
+				ltree(c.right);
+			}
+		}
+		System.out.print(key);
+		vis[id]=1;
 	}
 }
